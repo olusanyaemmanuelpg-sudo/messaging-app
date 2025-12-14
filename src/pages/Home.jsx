@@ -1,10 +1,27 @@
 /** @format */
 
 import Lottie from 'lottie-react';
+import { useState, useEffect } from 'react';
 import animationData from '../assets/Maintenance web.json';
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
 export function HomePage() {
+	const [countdown, setCountdown] = useState(12);
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setCountdown((prevCountdown) => prevCountdown - 1);
+		}, 1000);
+		return () => clearInterval(timer);
+	}, []);
+
+	const navigate = useNavigate();
+
+	setTimeout(() => {
+		navigate('/login');
+	}, 12000);
+
 	return (
 		<>
 			<main className='home'>
@@ -21,7 +38,7 @@ export function HomePage() {
 				</div>
 			</main>
 			<p className='home-footer'>
-				<em>navigating to login page...</em>
+				<em>navigating to login page...{countdown}</em>
 			</p>
 		</>
 	);
