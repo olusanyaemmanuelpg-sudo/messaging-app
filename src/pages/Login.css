@@ -60,10 +60,33 @@
 	flex-direction: column;
 	gap: 0.2rem;
 }
+.password-div {
+	display: flex;
+	flex-direction: row !important;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+	background-color: white;
+	padding-right: 0.5rem;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+}
+.password-div input {
+	flex: 1;
+	border: none !important;
+	outline: none;
+}
+.password-div img {
+	cursor: pointer;
+}
 .form div input {
 	padding: 0.7rem;
 	border: 1px solid #ccc;
 	border-radius: 5px;
+	font-size: 1rem;
+}
+.form div img {
+	width: 16px;
 }
 .forgot-password {
 	text-align: right;

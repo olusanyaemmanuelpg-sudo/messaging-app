@@ -1,8 +1,13 @@
 /** @format */
 
+import { useState } from 'react';
 import './Login.css';
 
 export function LoginPage() {
+	const [showPass, setShowPass] = useState(false);
+	const setPassword = () => {
+		setShowPass(!showPass);
+	};
 	return (
 		<div className='login'>
 			<div className='login-img'>
@@ -29,22 +34,24 @@ export function LoginPage() {
 					</div>
 				</div>
 				<div className='form'>
-					{/* <div>
-						<label htmlFor='profile-img'>Upload Profile Image</label>
-						<input
-							type='file'
-							accept='image/*'
-							name='profile-img'
-							id='profile-img'
-						/>
-					</div> */}
 					<div>
 						<label htmlFor='email'>Email</label>
 						<input type='email' name='email' id='email' />
 					</div>
 					<div>
 						<label htmlFor='password'>Password</label>
-						<input type='password' name='password' id='password' />
+						<div className='password-div'>
+							<input
+								type={showPass ? 'text' : 'password'}
+								name='password'
+								id='password'
+							/>
+							<img
+								src={showPass ? 'images/unlock.png' : 'images/padlock.png'}
+								alt=''
+								onClick={setPassword}
+							/>
+						</div>
 					</div>
 				</div>
 				<p className='forgot-password'>

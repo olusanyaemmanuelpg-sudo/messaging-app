@@ -1,9 +1,14 @@
 /** @format */
 
+import { useState } from 'react';
 import './Login.css';
 import './Signin.css';
 
 export function SigninPage() {
+	const [showPass, setShowPass] = useState(false);
+	const setPassword = () => {
+		setShowPass(!showPass);
+	};
 	return (
 		<div className='login'>
 			<div className='login-img'>
@@ -43,9 +48,17 @@ export function SigninPage() {
 						<label htmlFor='email'>Email</label>
 						<input type='email' name='email' id='email' />
 					</div>
-					<div>
-						<label htmlFor='password'>Password</label>
-						<input type='password' name='password' id='password' />
+					<div className='password-div'>
+						<input
+							type={showPass ? 'text' : 'password'}
+							name='password'
+							id='password'
+						/>
+						<img
+							src={showPass ? 'images/unlock.png' : 'images/padlock.png'}
+							alt=''
+							onClick={setPassword}
+						/>
 					</div>
 				</div>
 
