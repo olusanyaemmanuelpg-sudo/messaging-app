@@ -48,17 +48,20 @@ export function SigninPage() {
 						<label htmlFor='email'>Email</label>
 						<input type='email' name='email' id='email' />
 					</div>
-					<div className='password-div'>
-						<input
-							type={showPass ? 'text' : 'password'}
-							name='password'
-							id='password'
-						/>
-						<img
-							src={showPass ? 'images/unlock.png' : 'images/padlock.png'}
-							alt=''
-							onClick={setPassword}
-						/>
+					<div>
+						<label htmlFor='password'>Password</label>
+						<div className='password-div'>
+							<input
+								type={showPass ? 'text' : 'password'}
+								name='password'
+								id='password'
+							/>
+							<img
+								src={showPass ? 'images/unlock.png' : 'images/padlock.png'}
+								alt=''
+								onClick={setPassword}
+							/>
+						</div>
 					</div>
 				</div>
 
