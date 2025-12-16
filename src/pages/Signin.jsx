@@ -1,8 +1,9 @@
 /** @format */
 
 import './Login.css';
+import './Signin.css';
 
-export function LoginPage() {
+export function SigninPage() {
 	return (
 		<div className='login'>
 			<div className='login-img'>
@@ -14,7 +15,7 @@ export function LoginPage() {
 			<div className='login-info'>
 				<h2>Welcome Back!</h2>
 				<p style={{ marginBottom: '1rem' }}>Get sigin to your account</p>
-				<p>Login with...</p>
+				<p>Signin with...</p>
 				<div className='google-auth-box'>
 					<img src='images\google-png.png' alt='Google logo' />
 					Google
@@ -29,7 +30,7 @@ export function LoginPage() {
 					</div>
 				</div>
 				<div className='form'>
-					{/* <div>
+					<div>
 						<label htmlFor='profile-img'>Upload Profile Image</label>
 						<input
 							type='file'
@@ -37,7 +38,7 @@ export function LoginPage() {
 							name='profile-img'
 							id='profile-img'
 						/>
-					</div> */}
+					</div>
 					<div>
 						<label htmlFor='email'>Email</label>
 						<input type='email' name='email' id='email' />
@@ -47,13 +48,11 @@ export function LoginPage() {
 						<input type='password' name='password' id='password' />
 					</div>
 				</div>
-				<p className='forgot-password'>
-					<a href=''>Forgot Password?</a>
-				</p>
-				<div className='login-btn'>Login</div>
+
+				<div className='login-btn login-btn-sign'>Signin</div>
 				<p className='login-signup'>
-					<span> Don't have an account? </span>
-					<a href='/signin'>Sign Up</a>
+					<span> Have an account? </span>
+					<a href='/login'>Login</a>
 				</p>
 			</div>
 		</div>
