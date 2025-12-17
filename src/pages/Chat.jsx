@@ -22,9 +22,13 @@ export function ChatPage() {
 		<>
 			<header>
 				<div>
-					<img src='images\padlock.png' alt='' />
+					<img src='images/padlock.png' alt='Welcome to the chat' />
 				</div>
 				<div className='header-userInfo'>
+					<img
+						src={currentUser ? currentUser.photoURL : 'images/user.png'}
+						alt=''
+					/>
 					<p>{currentUser ? currentUser.email : 'Person'}</p>
 					<button onClick={Logout}>Logout</button>
 				</div>

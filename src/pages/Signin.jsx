@@ -4,9 +4,13 @@ import { useState } from 'react';
 import './Login.css';
 import './Signin.css';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, Provider } from '../Firebase/firebase-config.js';
+import { auth, db, Provider } from '../Firebase/firebase-config.js';
+import { doc, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 export function SigninPage() {
+	const navigate = useNavigate();
+
 	const [emailSignin, SetEmailSignin] = useState('');
 	const [passwordSignin, setPasswordSignin] = useState('');
 
@@ -16,11 +20,18 @@ export function SigninPage() {
 			const user = userCredential.user;
 			const name = user.displayName;
 			const email = user.email;
+			// const profilePic = user.photoURL;
 
-			console.log('User Name', name);
-			console.log('User Email', email);
 			console.log('User', user);
-			// console.log('User Credentials', userCredential);
+
+			const usersCollectionRef = doc(db, 'users', user.uid);
+			setDoc(usersCollectionRef, {
+				name,
+				email,
+				uid: user.uid,
+			});
+
+			navigate('/chat');
 		} catch (error) {
 			console.log(error);
 		}
@@ -38,9 +49,16 @@ export function SigninPage() {
 			);
 			const user = userCredential.user;
 
+			const usersCollectionRef = doc(db, 'users', user.uid);
+			setDoc(usersCollectionRef, {
+				email,
+				password,
+				uid: user.uid,
+			});
 			setPasswordSignin('');
 			SetEmailSignin('');
 			console.log('User', user);
+			navigate('/chat');
 		} catch (error) {
 			console.log(error);
 		}
