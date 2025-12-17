@@ -1,0 +1,13 @@
+/** @format */
+
+header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1rem;
+}
+.header-userInfo {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}

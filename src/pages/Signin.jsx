@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import './Login.css';
 import './Signin.css';
-import { signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, Provider } from '../Firebase/firebase-config.js';
 
 export function SigninPage() {
@@ -16,7 +16,31 @@ export function SigninPage() {
 			const user = userCredential.user;
 			const name = user.displayName;
 			const email = user.email;
-			console.log('User Credentials', userCredential);
+
+			console.log('User Name', name);
+			console.log('User Email', email);
+			console.log('User', user);
+			// console.log('User Credentials', userCredential);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const Signin = async () => {
+		try {
+			const email = emailSignin;
+			const password = passwordSignin;
+
+			const userCredential = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password,
+			);
+			const user = userCredential.user;
+
+			setPasswordSignin('');
+			SetEmailSignin('');
+			console.log('User', user);
 		} catch (error) {
 			console.log(error);
 		}
@@ -53,15 +77,6 @@ export function SigninPage() {
 				</div>
 				<div className='form'>
 					<div>
-						<label htmlFor='profile-img'>Upload Profile Image</label>
-						<input
-							type='file'
-							accept='image/*'
-							name='profile-img'
-							id='profile-img'
-						/>
-					</div>
-					<div>
 						<label htmlFor='email'>Email</label>
 						<input
 							type='email'
@@ -90,7 +105,9 @@ export function SigninPage() {
 					</div>
 				</div>
 
-				<div className='login-btn login-btn-sign'>Signin</div>
+				<div className='login-btn login-btn-sign' onClick={Signin}>
+					Signin
+				</div>
 				<p className='login-signup'>
 					<span> Have an account? </span>
 					<a href='/login'>Login</a>
