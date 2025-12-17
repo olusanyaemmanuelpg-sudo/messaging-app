@@ -115,7 +115,7 @@ export function LoginPage() {
 					</div>
 				</div>
 				<p className='forgot-password'>
-					<a href=''>Forgot Password?</a>
+					<a href='/reset'>Forgot Password?</a>
 				</p>
 				<div className='login-btn' onClick={Login}>
 					Login
