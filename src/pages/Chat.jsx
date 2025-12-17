@@ -3,9 +3,11 @@
 import { UseAuth } from '../custom-hooks/UseAuth';
 import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase/firebase-config';
+import { useNavigate } from 'react-router';
 import './Chat.css';
 
 export function ChatPage() {
+	const navigate = useNavigate();
 	const currentUser = UseAuth();
 	console.log('currentUser', currentUser);
 
@@ -16,6 +18,8 @@ export function ChatPage() {
 		} catch (error) {
 			console.log(error);
 		}
+
+		navigate('/login');
 	};
 
 	return (

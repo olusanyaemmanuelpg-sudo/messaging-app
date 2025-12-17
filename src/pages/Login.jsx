@@ -55,7 +55,6 @@ export function LoginPage() {
 
 			setError('');
 			navigate('/chat');
-			// console.log('User Credentials', userCredential);
 		} catch (error) {
 			console.log(error);
 		}

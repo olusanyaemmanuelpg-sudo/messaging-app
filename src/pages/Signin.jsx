@@ -52,7 +52,6 @@ export function SigninPage() {
 			const usersCollectionRef = doc(db, 'users', user.uid);
 			setDoc(usersCollectionRef, {
 				email,
-				password,
 				uid: user.uid,
 			});
 			setPasswordSignin('');
