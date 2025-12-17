@@ -3,8 +3,25 @@
 import { useState } from 'react';
 import './Login.css';
 import './Signin.css';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, Provider } from '../Firebase/firebase-config.js';
 
 export function SigninPage() {
+	const [emailSignin, SetEmailSignin] = useState('');
+	const [passwordSignin, setPasswordSignin] = useState('');
+
+	const siginWithGoogle = async () => {
+		try {
+			const userCredential = await signInWithPopup(auth, Provider);
+			const user = userCredential.user;
+			const name = user.displayName;
+			const email = user.email;
+			console.log('User Credentials', userCredential);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const [showPass, setShowPass] = useState(false);
 	const setPassword = () => {
 		setShowPass(!showPass);
@@ -21,7 +38,7 @@ export function SigninPage() {
 				<h2>Welcome Back!</h2>
 				<p style={{ marginBottom: '1rem' }}>Get sigin to your account</p>
 				<p>Signin with...</p>
-				<div className='google-auth-box'>
+				<div className='google-auth-box' onClick={siginWithGoogle}>
 					<img src='images\google-png.png' alt='Google logo' />
 					Google
 				</div>
@@ -46,7 +63,13 @@ export function SigninPage() {
 					</div>
 					<div>
 						<label htmlFor='email'>Email</label>
-						<input type='email' name='email' id='email' />
+						<input
+							type='email'
+							name='email'
+							id='email'
+							value={emailSignin}
+							onChange={(e) => SetEmailSignin(e.target.value)}
+						/>
 					</div>
 					<div>
 						<label htmlFor='password'>Password</label>
@@ -55,6 +78,8 @@ export function SigninPage() {
 								type={showPass ? 'text' : 'password'}
 								name='password'
 								id='password'
+								value={passwordSignin}
+								onChange={(e) => setPasswordSignin(e.target.value)}
 							/>
 							<img
 								src={showPass ? 'images/unlock.png' : 'images/padlock.png'}
