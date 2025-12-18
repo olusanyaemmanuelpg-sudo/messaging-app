@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, db, Provider } from '../Firebase/firebase-config.js';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { ProfileUpload } from './components/ProfileUpload.jsx';
 
 export function SigninPage() {
 	const navigate = useNavigate();
@@ -93,6 +94,7 @@ export function SigninPage() {
 					</div>
 				</div>
 				<div className='form'>
+					<ProfileUpload />
 					<div>
 						<label htmlFor='email'>Email</label>
 						<input
