@@ -42,6 +42,7 @@ export function SigninPage({
 	};
 
 	const Signin = async () => {
+		if (loading) return;
 		try {
 			const email = emailSignin;
 			const password = passwordSignin;
@@ -57,7 +58,7 @@ export function SigninPage({
 			setDoc(usersCollectionRef, {
 				email,
 				uid: user.uid,
-				userProfileUrl,
+				profileUrl: userProfileUrl,
 			});
 			setPasswordSignin('');
 			SetEmailSignin('');
