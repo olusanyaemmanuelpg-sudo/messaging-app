@@ -9,21 +9,26 @@ import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { ProfileUpload } from './components/ProfileUpload.jsx';
 
-export function SigninPage() {
+export function SigninPage({
+	userProfileUrl,
+	setUserProfileUrl,
+	loading,
+	setLoading,
+}) {
 	const navigate = useNavigate();
 
 	const [emailSignin, SetEmailSignin] = useState('');
 	const [passwordSignin, setPasswordSignin] = useState('');
+	const [error, setError] = useState('');
 
 	const siginWithGoogle = async () => {
+		if (loading) return;
+
 		try {
 			const userCredential = await signInWithPopup(auth, Provider);
 			const user = userCredential.user;
 			const name = user.displayName;
 			const email = user.email;
-			// const profilePic = user.photoURL;
-
-			console.log('User', user);
 
 			const usersCollectionRef = doc(db, 'users', user.uid);
 			setDoc(usersCollectionRef, {
@@ -54,13 +59,15 @@ export function SigninPage() {
 			setDoc(usersCollectionRef, {
 				email,
 				uid: user.uid,
+				userProfileUrl,
 			});
 			setPasswordSignin('');
 			SetEmailSignin('');
-			console.log('User', user);
+			setError('');
 			navigate('/chat');
 		} catch (error) {
 			console.log(error);
+			setError(error.message);
 		}
 	};
 
@@ -73,6 +80,7 @@ export function SigninPage() {
 			<div className='login-img'>
 				<img
 					src='images\login-img.jpg'
+					loading='lazy'
 					alt='a picture of a lady sitting,smilling and a laptop on her lap with a message app open'
 				/>
 			</div>
@@ -94,7 +102,12 @@ export function SigninPage() {
 					</div>
 				</div>
 				<div className='form'>
-					<ProfileUpload />
+					<ProfileUpload
+						setUserProfileUrl={setUserProfileUrl}
+						setLoading={setLoading}
+						loading={loading}
+					/>
+					{loading && <p>Loading...</p>}
 					<div>
 						<label htmlFor='email'>Email</label>
 						<input
@@ -122,6 +135,7 @@ export function SigninPage() {
 							/>
 						</div>
 					</div>
+					{error && <p className='error'>{error}</p>}
 				</div>
 
 				<div className='login-btn login-btn-sign' onClick={Signin}>

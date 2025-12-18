@@ -1,10 +1,8 @@
 /** @format */
 
 import { useState } from 'react';
-// import { auth, db } from '../../Firebase/firebase-config';
 
-export function ProfileUpload() {
-	const [loading, setLoading] = useState(false);
+export function ProfileUpload({ setUserProfileUrl, setLoading, loading }) {
 	const [imageUrl, setImageUrl] = useState('');
 
 	const [image, setImage] = useState(null);
@@ -33,8 +31,6 @@ export function ProfileUpload() {
 			const data = await response.json();
 			if (data.secure_url) {
 				setImageUrl(data.secure_url);
-				console.log('Image uploaded URL:', data.secure_url);
-				// CALL A FUNCTION HERE TO SAVE data.secure_url TO FIREBASE FIRESTORE
 			} else {
 				console.error('Upload failed', data);
 			}
@@ -44,11 +40,11 @@ export function ProfileUpload() {
 			setLoading(false);
 		}
 	};
-	console.log(imageUrl);
 
 	const handleFileChange = (event) => {
 		setImage(event.target.files[0]);
 	};
+	setUserProfileUrl(imageUrl);
 	return (
 		<div>
 			<label htmlFor='profile'>Upload Profile </label>

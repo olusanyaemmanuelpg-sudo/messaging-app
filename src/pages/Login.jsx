@@ -64,6 +64,7 @@ export function LoginPage() {
 			<div className='login-img'>
 				<img
 					src='images\login-img.jpg'
+					loading='lazy'
 					alt='a picture of a lady sitting,smilling and a laptop on her lap with a message app open'
 				/>
 			</div>
