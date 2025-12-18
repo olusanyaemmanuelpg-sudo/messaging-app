@@ -22,8 +22,6 @@ export function SigninPage({
 	const [error, setError] = useState('');
 
 	const siginWithGoogle = async () => {
-		if (loading) return;
-
 		try {
 			const userCredential = await signInWithPopup(auth, Provider);
 			const user = userCredential.user;

@@ -1,0 +1,8 @@
+/** @format */
+
+.profile-btn {
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	border-radius: 5px;
+	border-width: thin;
+}

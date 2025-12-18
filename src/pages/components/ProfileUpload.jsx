@@ -1,5 +1,6 @@
 /** @format */
 
+import './ProfileUpload.css';
 import { useState } from 'react';
 
 export function ProfileUpload({ setUserProfileUrl, setLoading, loading }) {
@@ -54,7 +55,11 @@ export function ProfileUpload({ setUserProfileUrl, setLoading, loading }) {
 				id='profileUrl'
 				onChange={handleFileChange}
 			/>
-			<button onClick={uploadImage}>
+			<button
+				onClick={() => {
+					uploadImage();
+				}}
+				className='profile-btn'>
 				{loading ? 'Uploading...' : 'Upload'}
 			</button>
 		</div>
