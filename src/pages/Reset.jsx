@@ -4,8 +4,10 @@ import { useState } from 'react';
 import './Login.css';
 import './Signin.css';
 import { sendPasswordResetEmail, getAuth } from 'firebase/auth';
+import { Toast } from './Toast';
 
 export function ResetPage() {
+	const [showToast, setShowToast] = useState(false);
 	const [emailSignin, SetEmailSignin] = useState('');
 	const [error, setError] = useState('');
 
@@ -20,14 +22,15 @@ export function ResetPage() {
 		try {
 			const email = emailSignin;
 			await sendPasswordResetEmail(auth, email);
-			alert(`Password reset email sent!
-        Check your email spam if not seen.`);
+			setShowToast(true);
 			setError('');
 		} catch (error) {
 			const errorCode = error.code;
 			const errorMessage = error.message;
 			setError(`Error sending reset email: ${errorCode} - ${errorMessage}`);
 		}
+
+		setTimeout(() => setShowToast(false), 5000);
 	};
 	return (
 		<div className='login'>
@@ -37,6 +40,7 @@ export function ResetPage() {
 					alt='a picture of a lady sitting,smilling and a laptop on her lap with a message app open'
 				/>
 			</div>
+			{showToast && <Toast />}
 			<div className='login-info'>
 				<h2>Reset Password</h2>
 				<p style={{ marginBottom: '1rem' }}>
