@@ -45,19 +45,3 @@ header {
 .header-userInfo button:hover {
 	transform: scale(1.05);
 }
-main {
-	display: grid;
-	grid-template-columns: 300px 1fr;
-	gap: 1rem;
-	padding: 1.3rem;
-}
-.chat-info {
-	background: rgba(255, 255, 255, 0.7);
-	backdrop-filter: blur(10px);
-	height: 100%;
-}
-.chat-input {
-	background: rgba(255, 255, 255, 0.7);
-	backdrop-filter: blur(10px);
-	height: 100%;
-}

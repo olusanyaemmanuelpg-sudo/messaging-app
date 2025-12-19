@@ -9,8 +9,8 @@ export function ProfileUpload({ setUserProfileUrl, setLoading, loading }) {
 	const [image, setImage] = useState(null);
 
 	// !! REPLACE THESE WITH YOUR OWN DETAILS !!
-	const CLOUD_NAME = '';
-	const UPLOAD_PRESET = '';
+	const CLOUD_NAME = 'dovuy2zci';
+	const UPLOAD_PRESET = 'webdeji-messaging-upload';
 
 	const uploadImage = async () => {
 		if (!image) return;

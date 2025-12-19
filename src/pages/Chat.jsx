@@ -57,10 +57,6 @@ export function ChatPage() {
 					<button onClick={Logout}>Logout</button>
 				</div>
 			</header>
-			<main>
-				<section className='chat-info'></section>
-				<section className='chat-input'></section>
-			</main>
 		</>
 	);
 }

@@ -1,29 +1,37 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../Firebase/firebase-config";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 
 export const UseAuth = () => {
   const [user, setUser] = useState(null);
-
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
         const idTokenResult = await user.getIdTokenResult(true);
-       if (idTokenResult.claims.admin) {
-        navigate('/admin-page')
-       } 
+        const isAdmin = !!idTokenResult.claims.admin;
+
+        // ONLY navigate if we are not already where we should be
+        if (isAdmin && location.pathname !== '/admin-page') {
+          navigate('/admin-page');
+        } else if (!isAdmin && location.pathname !== '/chat') {
+          navigate('/chat');
+        }
       } else {
         setUser(null);
-        navigate('/login')
+        // Only redirect to login if we aren't already there (prevents loops)
+        if (location.pathname !== '/login' && location.pathname !== '/signup') {
+          navigate('/login');
+        }
       }
     });
 
     return unsubscribe;
-  }, []);
+  }, [navigate, location.pathname]);
 
   return user;
 }
