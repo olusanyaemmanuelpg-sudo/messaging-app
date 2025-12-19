@@ -4,10 +4,60 @@ header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 1rem;
+	padding: 1.3rem;
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(10px);
+}
+.header-logo {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+.header-logo h2 {
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	color: #333;
 }
 .header-userInfo {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
+}
+.header-userInfo img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+	transition: all 0.3s ease;
+}
+.header-userInfo img:hover {
+	transform: scale(1.05);
+}
+.header-userInfo button {
+	background-color: #e07a5f;
+	color: #fff;
+	padding: 0.5rem 1rem;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1rem;
+	font-weight: 500;
+}
+.header-userInfo button:hover {
+	transform: scale(1.05);
+}
+main {
+	display: grid;
+	grid-template-columns: 300px 1fr;
+	gap: 1rem;
+	padding: 1.3rem;
+}
+.chat-info {
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(10px);
+	height: 100%;
+}
+.chat-input {
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(10px);
+	height: 100%;
 }

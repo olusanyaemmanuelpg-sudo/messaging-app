@@ -44,8 +44,9 @@ export function ChatPage() {
 	return (
 		<>
 			<header>
-				<div>
-					<img src='images/padlock.png' alt='Welcome to the chat' />
+				<div className='header-logo'>
+					<h2>Web Deji</h2>
+					<img src='images/chat.png' alt='Welcome to the chat' />
 				</div>
 				<div className='header-userInfo'>
 					<img
@@ -56,7 +57,10 @@ export function ChatPage() {
 					<button onClick={Logout}>Logout</button>
 				</div>
 			</header>
-			<main></main>
+			<main>
+				<section className='chat-info'></section>
+				<section className='chat-input'></section>
+			</main>
 		</>
 	);
 }

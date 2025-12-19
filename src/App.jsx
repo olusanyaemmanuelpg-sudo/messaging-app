@@ -6,6 +6,8 @@ import { LoginPage } from './pages/Login';
 import { SigninPage } from './pages/Signin';
 import { ChatPage } from './pages/Chat';
 import { ResetPage } from './pages/Reset';
+import { AdminPage } from './pages/Adminpage';
+
 import './App.css';
 import { useState } from 'react';
 
@@ -28,6 +30,7 @@ function App() {
 					/>
 				}
 			/>
+			<Route path='/admin-page' element={<AdminPage />} />
 			<Route path='/chat' element={<ChatPage />} />
 			<Route path='/reset' element={<ResetPage />} />
 		</Routes>

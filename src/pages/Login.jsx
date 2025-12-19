@@ -44,14 +44,14 @@ export function LoginPage() {
 	};
 	const siginWithGoogle = async () => {
 		try {
-			const userCredential = await signInWithPopup(auth, Provider);
-			const user = userCredential.user;
-			const name = user.displayName;
-			const email = user.email;
+			await signInWithPopup(auth, Provider);
+			// const user = userCredential.user;
+			// const name = user.displayName;
+			// const email = user.email;
 
-			console.log('User Name', name);
-			console.log('User Email', email);
-			console.log('User', user);
+			// console.log('User Name', name);
+			// console.log('User Email', email);
+			// console.log('User', user);
 
 			setError('');
 			navigate('/chat');
