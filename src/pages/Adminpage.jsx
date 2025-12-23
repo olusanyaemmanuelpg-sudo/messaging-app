@@ -83,6 +83,43 @@ export function AdminPage() {
 		);
 	});
 
+	// Function to format timestamp like WhatsApp
+	const formatRelativeTime = (timestamp) => {
+		if (!timestamp) return '';
+
+		const date = timestamp.toDate();
+		const now = new Date();
+		const yesterday = new Date(now);
+		yesterday.setDate(yesterday.getDate() - 1);
+
+		// Helper to check if dates are the same day
+		const isSameDay = (d1, d2) => {
+			return (
+				d1.getFullYear() === d2.getFullYear() &&
+				d1.getMonth() === d2.getMonth() &&
+				d1.getDate() === d2.getDate()
+			);
+		};
+
+		if (isSameDay(date, now)) {
+			// Today: Show only time (e.g., 10:30 AM)
+			return date.toLocaleTimeString([], {
+				hour: '2-digit',
+				minute: '2-digit',
+			});
+		} else if (isSameDay(date, yesterday)) {
+			// Yesterday: Show "Yesterday"
+			return 'Yesterday';
+		} else {
+			// Older: Show the date (e.g., Dec 20, 2025)
+			return date.toLocaleDateString([], {
+				month: 'short',
+				day: 'numeric',
+				year: 'numeric',
+			});
+		}
+	};
+
 	return (
 		<>
 			<header>
@@ -117,7 +154,9 @@ export function AdminPage() {
 									</div>
 								</div>
 								<div>
-									<p>{chat.lastTimestamp.toDate().toLocaleString()}</p>
+									<p className='chat-time'>
+										{formatRelativeTime(chat.lastTimestamp)}
+									</p>
 								</div>
 							</div>
 						))}
