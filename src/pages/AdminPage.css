@@ -2,14 +2,14 @@
 
 main {
 	display: grid;
-	grid-template-columns: 300px 1fr;
+	grid-template-columns: 400px 1fr;
 	gap: 1rem;
 	padding: 1.3rem;
 }
 .admin-chat-info {
 	background: rgba(255, 255, 255, 0.7);
 	backdrop-filter: blur(10px);
-	height: calc(100vh - 7rem);
+	height: calc(100vh - 6rem);
 	padding: 0.5rem;
 }
 .admin-chat-info input {
@@ -35,6 +35,10 @@ main {
 	justify-content: space-between;
 	align-items: center;
 	padding: 0.5rem;
+	border-radius: 5px;
+}
+.admin-chat-info-user:hover {
+	border: 1px solid #333;
 }
 .user-img {
 	width: 40px;
@@ -60,6 +64,7 @@ main {
 	border-radius: 5px;
 	padding: 0 1rem;
 	font-size: 1rem;
+	border: 1px solid #333;
 }
 .input-div {
 	display: flex;
@@ -85,4 +90,19 @@ main {
 .chat-messages {
 	height: calc(100vh - 11.5rem);
 	overflow-y: scroll;
+}
+.select-conversation {
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: #666;
+	font-size: 3rem;
+}
+.truncate-text {
+	white-space: nowrap; /* Prevent text from wrapping to the next line */
+	overflow: hidden; /* Hide the overflowing text */
+	text-overflow: ellipsis; /* Show an ellipsis (...) when text overflows */
+	max-width: 200px; /* Set a specific width limit */
 }

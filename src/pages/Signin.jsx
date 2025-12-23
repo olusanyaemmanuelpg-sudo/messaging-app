@@ -5,7 +5,7 @@ import './Login.css';
 import './Signin.css';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, db, Provider } from '../Firebase/firebase-config.js';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { ProfileUpload } from './components/ProfileUpload.jsx';
 
@@ -21,6 +21,22 @@ export function SigninPage({
 	const [passwordSignin, setPasswordSignin] = useState('');
 	const [error, setError] = useState('');
 
+	const createChatRoomForUser = async (userUid, userEmail) => {
+		const adminUid = 'oTjuzMjNlVf74GzhBZFHTDdVHSI2';
+		const chatRef = doc(db, 'chats', userUid);
+		await setDoc(
+			chatRef,
+			{
+				participants: [userUid, adminUid],
+				lastMessage: `Welcome, ${userEmail}!`,
+				lastTimestamp: serverTimestamp(),
+			},
+			{
+				merge: true,
+			},
+		);
+	};
+
 	const siginWithGoogle = async () => {
 		try {
 			const userCredential = await signInWithPopup(auth, Provider);
@@ -35,6 +51,7 @@ export function SigninPage({
 				uid: user.uid,
 			});
 
+			await createChatRoomForUser(user.uid, email);
 			navigate('/chat');
 		} catch (error) {
 			console.log(error);
@@ -60,6 +77,7 @@ export function SigninPage({
 				uid: user.uid,
 				profileUrl: userProfileUrl,
 			});
+			await createChatRoomForUser(user.uid, email);
 			setPasswordSignin('');
 			SetEmailSignin('');
 			setError('');
