@@ -14,7 +14,7 @@ import {
 	onSnapshot,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Chat.css';
 
 export function ChatPage() {
@@ -133,6 +133,13 @@ export function ChatPage() {
 			console.error('Error sending message: ', error);
 		}
 	};
+	const messagesEndRef = useRef(null);
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+	};
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
 
 	return (
 		<>
@@ -166,6 +173,7 @@ export function ChatPage() {
 								</div>
 							))
 						:	<p className='select-conversation'>Select a conversation</p>}
+						<div ref={messagesEndRef} />
 					</div>
 					<div className='input-div'>
 						<input

@@ -91,7 +91,8 @@ main {
 }
 .chat-messages {
 	height: calc(100vh - 11.5rem);
-	overflow-y: scroll;
+	overflow: scroll;
+	scrollbar-width: none;
 }
 .select-conversation {
 	padding: 1rem;

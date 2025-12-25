@@ -13,7 +13,7 @@ import {
 	serverTimestamp,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './AdminPage.css';
 
 export function AdminPage() {
@@ -131,6 +131,14 @@ export function AdminPage() {
 			console.error('Error sending message: ', error);
 		}
 	};
+	const messagesEndRef = useRef(null);
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+	};
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
+
 	// Function to format timestamp like WhatsApp
 	const formatRelativeTime = (timestamp) => {
 		if (!timestamp) return '';
@@ -231,6 +239,7 @@ export function AdminPage() {
 								</div>
 							))
 						:	<p className='select-conversation'>Select a conversation</p>}
+						<div ref={messagesEndRef} />
 					</div>
 					<div className='input-div'>
 						<input

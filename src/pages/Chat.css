@@ -95,7 +95,8 @@ header {
 }
 .chat-messages {
 	height: calc(100vh - 11.5rem);
-	overflow-y: scroll;
+	overflow: scroll;
+	scrollbar-width: none;
 	display: flex;
 	flex-direction: column;
 	padding: 1rem;
