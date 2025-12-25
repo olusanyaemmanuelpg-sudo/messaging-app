@@ -84,3 +84,13 @@ To access the Admin Dashboard, a user must have the `admin` custom claim in Fire
 - **Cloudinary**: Credentials are set in `src/pages/Chat.jsx`:
     - Cloud Name: `Your Cloudinary Cloud Name`
     - Upload Preset: `Your Cloudinary Upload Preset`
+
+🚀 Live Demo: 🔗 https://app.netlify.com/projects/webdeji-messaging-app/
+
+📬 Contact
+
+Let’s connect!
+
+LinkedIn: https://www.linkedin.com/in/olusanya-emmanuel-21546536a?
+
+Whatsapp: https://wa.link/ad7t5w
