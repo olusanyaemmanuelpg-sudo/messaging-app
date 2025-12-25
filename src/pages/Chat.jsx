@@ -12,6 +12,7 @@ import {
 	query,
 	orderBy,
 	onSnapshot,
+	setDoc,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
 import { useState, useEffect, useRef } from 'react';
@@ -126,6 +127,20 @@ export function ChatPage() {
 				adminMessage: false,
 				adminProfile: userProfileUrl,
 			});
+
+			const chatDocRef = doc(db, 'chats', currentUser.uid);
+			await setDoc(
+				chatDocRef,
+				{
+					lastMessage: newMessage,
+					lastTimestamp: serverTimestamp(),
+					lastSenderId: 'user',
+					// Ensuring these fields exist for the Admin sidebar
+					profileUrl: userProfileUrl,
+					email: currentUser.email,
+				},
+				{ merge: true },
+			);
 
 			console.log('Message sent successfully!');
 			setNewMessage('');

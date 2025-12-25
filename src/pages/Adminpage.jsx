@@ -11,6 +11,7 @@ import {
 	onSnapshot,
 	addDoc,
 	serverTimestamp,
+	setDoc,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
 import { useState, useEffect, useRef } from 'react';
@@ -122,10 +123,19 @@ export function AdminPage() {
 				text: newMessage,
 				createdAt: serverTimestamp(),
 				adminMessage: true,
-				adminProfile: userProfileUrl,
 			});
 
-			console.log('Message sent successfully!');
+			const chatDocRef = doc(db, 'chats', selectedChat.id);
+			await setDoc(
+				chatDocRef,
+				{
+					lastMessage: newMessage,
+					lastTimestamp: serverTimestamp(),
+					lastSenderId: 'admin',
+				},
+				{ merge: true },
+			);
+
 			setNewMessage('');
 		} catch (error) {
 			console.error('Error sending message: ', error);
@@ -213,7 +223,18 @@ export function AdminPage() {
 									/>
 									<div className='admin-chat-info-user-div'>
 										<p className='truncate-text'>{chat.name}</p>
-										<p className='truncate-text'>{chat.lastMessage}</p>
+										<p
+											className='truncate-text'
+											style={{
+												color:
+													chat.lastSenderId !== 'admin' ? '#00bfa5' : '#666',
+												fontWeight:
+													chat.lastSenderId !== 'admin' ? 'italic' : 'normal',
+											}}>
+											{chat.lastSenderId !== 'admin' ?
+												`User: ${chat.lastMessage}`
+											:	`You: ${chat.lastMessage}`}
+										</p>
 									</div>
 								</div>
 								<div>
@@ -239,6 +260,7 @@ export function AdminPage() {
 								</div>
 							))
 						:	<p className='select-conversation'>Select a conversation</p>}
+
 						<div ref={messagesEndRef} />
 					</div>
 					<div className='input-div'>
