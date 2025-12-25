@@ -29,6 +29,7 @@ main {
 .admin-chat-info-users-list {
 	height: calc(100vh - 10rem);
 	overflow-y: scroll;
+	scrollbar-width: none;
 }
 .admin-chat-info-user {
 	display: flex;
