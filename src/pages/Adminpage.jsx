@@ -269,6 +269,11 @@ export function AdminPage() {
 							placeholder='Type your message'
 							value={newMessage}
 							onChange={(e) => setNewMessage(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									sendMessage();
+								}
+							}}
 						/>
 						<div className='img' onClick={sendMessage}>
 							<img src='images/send.png' alt='send' />
