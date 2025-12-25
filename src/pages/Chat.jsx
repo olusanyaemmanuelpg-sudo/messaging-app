@@ -1,7 +1,7 @@
 /** @format */
 
 import { UseAuth } from '../custom-hooks/UseAuth';
-import { signOut } from 'firebase/auth';
+import { signOut, updateProfile } from 'firebase/auth';
 import { auth, db } from '../Firebase/firebase-config';
 import {
 	doc,
@@ -22,6 +22,12 @@ export function ChatPage() {
 	const [userProfileUrl, setUserProfileUrl] = useState('');
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState('');
+	const [uploading, setUploading] = useState(false);
+	const fileInputRef = useRef(null);
+
+	// Cloudinary Config
+	const CLOUD_NAME = 'dovuy2zci';
+	const UPLOAD_PRESET = 'webdeji-messaging-upload';
 
 	const navigate = useNavigate();
 	const currentUser = UseAuth();
@@ -148,6 +154,61 @@ export function ChatPage() {
 			console.error('Error sending message: ', error);
 		}
 	};
+
+	const handleImageUpload = async (event) => {
+		const file = event.target.files[0];
+		if (!file) return;
+
+		setUploading(true);
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('upload_preset', UPLOAD_PRESET);
+
+		try {
+			const response = await fetch(
+				`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+				{
+					method: 'POST',
+					body: formData,
+				},
+			);
+
+			const data = await response.json();
+			if (data.secure_url) {
+				const newProfileUrl = data.secure_url;
+				setUserProfileUrl(newProfileUrl);
+
+				// Update Firestore User Doc
+				await setDoc(
+					doc(db, 'users', currentUser.uid),
+					{ profileUrl: newProfileUrl },
+					{ merge: true },
+				);
+
+				// Update Firebase Auth Profile
+				if (auth.currentUser) {
+					await updateProfile(auth.currentUser, {
+						photoURL: newProfileUrl,
+					});
+				}
+
+				// Update Chat Doc (so sidebar updates immediately)
+				await setDoc(
+					doc(db, 'chats', currentUser.uid),
+					{ profileUrl: newProfileUrl },
+					{ merge: true },
+				);
+
+				alert('Profile picture updated!');
+			}
+		} catch (error) {
+			console.error('Error uploading image:', error);
+			alert('Failed to upload image');
+		} finally {
+			setUploading(false);
+		}
+	};
+
 	const messagesEndRef = useRef(null);
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -164,10 +225,23 @@ export function ChatPage() {
 					<img src='images/chat.png' alt='Welcome to the chat' />
 				</div>
 				<div className='header-userInfo'>
-					<img
-						src={userProfileUrl ? userProfileUrl : 'images/user.png'}
-						alt=''
-					/>
+					<p>Update Profile →→</p>
+					<div style={{ position: 'relative', cursor: 'pointer' }}>
+						<img
+							src={userProfileUrl ? userProfileUrl : 'images/user.png'}
+							alt=''
+							onClick={() => fileInputRef.current.click()}
+							style={{ opacity: uploading ? 0.3 : 1 }}
+							title='Update Profile'
+						/>
+						<input
+							type='file'
+							ref={fileInputRef}
+							onChange={handleImageUpload}
+							style={{ display: 'none' }}
+							accept='image/*'
+						/>
+					</div>
 					<p>{currentUser ? currentUser.email : 'Person'}</p>
 					<button onClick={Logout}>Logout</button>
 				</div>
