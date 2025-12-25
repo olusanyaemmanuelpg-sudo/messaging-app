@@ -85,7 +85,7 @@ To access the Admin Dashboard, a user must have the `admin` custom claim in Fire
     - Cloud Name: `Your Cloudinary Cloud Name`
     - Upload Preset: `Your Cloudinary Upload Preset`
 
-🚀 Live Demo: 🔗 https://app.netlify.com/projects/webdeji-messaging-app/
+🚀 Live Demo: 🔗 (https://webdeji-messaging-app.netlify.app/)
 
 📬 Contact
 
