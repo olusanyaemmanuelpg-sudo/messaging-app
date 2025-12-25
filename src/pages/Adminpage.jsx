@@ -9,6 +9,8 @@ import {
 	query,
 	orderBy,
 	onSnapshot,
+	addDoc,
+	serverTimestamp,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
@@ -17,6 +19,9 @@ import './AdminPage.css';
 export function AdminPage() {
 	const [chats, setChats] = useState([]);
 	const [userProfileUrl, setUserProfileUrl] = useState('');
+	const [selectedChat, setSelectedChat] = useState(null);
+	const [messages, setMessages] = useState([]);
+	const [newMessage, setNewMessage] = useState('');
 
 	const navigate = useNavigate();
 	const currentUser = UseAuth();
@@ -51,38 +56,81 @@ export function AdminPage() {
 		const chatCollectionRef = collection(db, 'chats');
 		const q = query(chatCollectionRef, orderBy('lastTimestamp', 'desc'));
 
-		const unsubscribeFromChats = onSnapshot(
-			q,
-			async (snapshot) => {
-				const chatsList = snapshot.docs.map((document) => ({
-					id: document.id, // The ID here is the User's UID
-					...document.data(),
-				}));
+		const unsubscribeFromChats = onSnapshot(q, async (snapshot) => {
+			const chatsList = snapshot.docs.map((document) => ({
+				id: document.id, // The ID here is the User's UID
+				...document.data(),
+			}));
 
-				const chatWithUserDetails = await Promise.all(
-					chatsList.map(async (chat) => {
-						const userDoc = await doc(db, 'users', chat.id);
-						const userSnapshot = await getDoc(userDoc);
-						if (userSnapshot.exists()) {
-							return {
-								...chat,
-								user: userSnapshot.data(),
-								profileUrl: userSnapshot.data().profileUrl,
-								name: userSnapshot.data().name || userSnapshot.data().email,
-							};
-						}
-						return chat;
-					}),
-				);
-				setChats(chatWithUserDetails);
-				return () => {
-					unsubscribeFromChats();
-				};
-			},
-			[],
+			const chatWithUserDetails = await Promise.all(
+				chatsList.map(async (chat) => {
+					const userDoc = await doc(db, 'users', chat.id);
+					const userSnapshot = await getDoc(userDoc);
+					if (userSnapshot.exists()) {
+						return {
+							...chat,
+							user: userSnapshot.data(),
+							profileUrl: userSnapshot.data().profileUrl,
+							name: userSnapshot.data().name || userSnapshot.data().email,
+						};
+					}
+					return chat;
+				}),
+			);
+			setChats(chatWithUserDetails);
+		});
+
+		return () => {
+			unsubscribeFromChats();
+		};
+	}, []);
+
+	useEffect(() => {
+		if (!selectedChat) return;
+		setMessages([]);
+
+		const messageCollectionRef = collection(
+			db,
+			'chats',
+			selectedChat.id,
+			'messages',
 		);
-	});
+		const q = query(messageCollectionRef, orderBy('createdAt', 'asc'));
 
+		const unsubscribeFromMessages = onSnapshot(q, (querySnapshot) => {
+			const fetchedMessages = [];
+			querySnapshot.forEach((doc) => {
+				fetchedMessages.push({ id: doc.id, ...doc.data() });
+			});
+			setMessages(fetchedMessages);
+		});
+		return () => {
+			unsubscribeFromMessages();
+		};
+	}, [selectedChat]);
+
+	const sendMessage = async () => {
+		if (!newMessage) return;
+		try {
+			const messagesCollectionRef = collection(
+				db,
+				'chats',
+				selectedChat.id,
+				'messages',
+			);
+			await addDoc(messagesCollectionRef, {
+				text: newMessage,
+				createdAt: serverTimestamp(),
+				adminMessage: true,
+				adminProfile: userProfileUrl,
+			});
+
+			console.log('Message sent successfully!');
+			setNewMessage('');
+		} catch (error) {
+			console.error('Error sending message: ', error);
+		}
+	};
 	// Function to format timestamp like WhatsApp
 	const formatRelativeTime = (timestamp) => {
 		if (!timestamp) return '';
@@ -141,7 +189,14 @@ export function AdminPage() {
 					<input type='text' placeholder='Search for users' />
 					<div className='admin-chat-info-users-list'>
 						{chats.map((chat) => (
-							<div className='admin-chat-info-user' key={chat.id}>
+							<div
+								className='admin-chat-info-user'
+								key={chat.id}
+								onClick={() => setSelectedChat(chat)}
+								style={{
+									border:
+										selectedChat?.id === chat.id ? '1px solid #333' : 'none',
+								}}>
 								<div className='admin-chat-info-user-info'>
 									<img
 										src={chat ? chat.profileUrl : 'images/robot.png'}
@@ -164,11 +219,27 @@ export function AdminPage() {
 				</section>
 				<section className='admin-chat-input'>
 					<div className='chat-messages'>
-						<p className='select-conversation'>Select a conversation</p>
+						{selectedChat ?
+							messages.map((msg) => (
+								<div
+									key={msg.id}
+									className={`message ${msg.adminMessage ? 'admin' : 'user'}`}>
+									<p>{msg.text}</p>
+									<span className='timestamp'>
+										{formatRelativeTime(msg.createdAt)}
+									</span>
+								</div>
+							))
+						:	<p className='select-conversation'>Select a conversation</p>}
 					</div>
 					<div className='input-div'>
-						<input type='text' placeholder='Type your message' />
-						<div className='img'>
+						<input
+							type='text'
+							placeholder='Type your message'
+							value={newMessage}
+							onChange={(e) => setNewMessage(e.target.value)}
+						/>
+						<div className='img' onClick={sendMessage}>
 							<img src='images/send.png' alt='send' />
 						</div>
 					</div>

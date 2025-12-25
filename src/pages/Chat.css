@@ -45,3 +45,100 @@ header {
 .header-userInfo button:hover {
 	transform: scale(1.05);
 }
+.user-chats {
+	display: grid;
+	grid-template-columns: 300px 1fr;
+	gap: 1rem;
+	padding: 1.3rem;
+}
+.about-admin {
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(10px);
+	height: calc(100vh - 6rem);
+	padding: 0.5rem;
+}
+.user-chat {
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(10px);
+	height: calc(100vh - 6rem);
+	padding: 0.5rem;
+}
+/* New styles for Chat */
+.input-div {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 1rem;
+}
+.input-div input {
+	width: 100%;
+	height: 50px;
+	border-radius: 5px;
+	padding: 0 1rem;
+	font-size: 1rem;
+	border: 1px solid #333;
+}
+.input-div img {
+	width: 25px;
+	height: 25px;
+	object-fit: cover;
+}
+.input-div .img {
+	border-radius: 50%;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	padding: 0.8rem;
+	background-color: #e07a5f;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.chat-messages {
+	height: calc(100vh - 11.5rem);
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+}
+
+/* Message Bubbles */
+.message {
+	max-width: 60%;
+	width: fit-content;
+	padding: 0.8rem 1rem;
+	margin-bottom: 0.5rem;
+	border-radius: 10px;
+	position: relative;
+	word-wrap: break-word;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	font-size: 0.95rem;
+	line-height: 1.4;
+}
+
+/* Admin messages (Them) -> Left/Gray */
+.user-message.admin {
+	background-color: #ffffff !important;
+	color: #333 !important;
+	align-self: flex-start !important;
+	margin-left: 0 !important;
+	border-bottom-left-radius: 0 !important;
+	border-bottom-right-radius: 10px !important;
+}
+
+/* User messages (Me) -> Right/Orange */
+.user-message.user {
+	background-color: #e07a5f !important;
+	color: white !important;
+	align-self: flex-end !important;
+	margin-right: 0 !important;
+	border-bottom-right-radius: 0 !important;
+	border-bottom-left-radius: 10px !important;
+}
+
+.timestamp {
+	display: block;
+	font-size: 0.7rem;
+	margin-top: 0.2rem;
+	text-align: right;
+	opacity: 0.7;
+}
