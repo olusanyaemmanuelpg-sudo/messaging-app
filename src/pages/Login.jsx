@@ -59,6 +59,11 @@ export function LoginPage() {
 			console.log(error);
 		}
 	};
+	const handleLogin = (e) => {
+		e.preventDefault();
+		Login();
+	};
+
 	return (
 		<div className='login'>
 			<div className='login-img'>
@@ -85,7 +90,7 @@ export function LoginPage() {
 						<hr />
 					</div>
 				</div>
-				<div className='form'>
+				<form className='form' onSubmit={handleLogin}>
 					<div>
 						<label htmlFor='email'>Email</label>
 						<input
@@ -114,13 +119,17 @@ export function LoginPage() {
 						</div>
 						{error && <p className='error'>Invalid email or password</p>}
 					</div>
-				</div>
-				<p className='forgot-password'>
-					<a href='/reset'>Forgot Password?</a>
-				</p>
-				<div className='login-btn' onClick={Login}>
-					Login
-				</div>
+
+					<p className='forgot-password'>
+						<a href='/reset'>Forgot Password?</a>
+					</p>
+					<button
+						type='submit'
+						className='login-btn'
+						style={{ border: 'none', width: '100%' }}>
+						Login
+					</button>
+				</form>
 				<p className='login-signup'>
 					<span> Don't have an account? </span>
 					<a href='/signin'>Sign Up</a>

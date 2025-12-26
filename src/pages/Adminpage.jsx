@@ -23,6 +23,8 @@ export function AdminPage() {
 	const [selectedChat, setSelectedChat] = useState(null);
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState('');
+	const [searchQuery, setSearchQuery] = useState('');
+	const [loading, setLoading] = useState(true);
 
 	const navigate = useNavigate();
 	const currentUser = UseAuth();
@@ -30,7 +32,6 @@ export function AdminPage() {
 	const Logout = () => {
 		try {
 			signOut(auth);
-			alert('logout');
 		} catch (error) {
 			console.log(error);
 		}
@@ -79,6 +80,7 @@ export function AdminPage() {
 				}),
 			);
 			setChats(chatWithUserDetails);
+			setLoading(false);
 		});
 
 		return () => {
@@ -186,6 +188,22 @@ export function AdminPage() {
 		}
 	};
 
+	// Function to handle back button click (for mobile)
+	const handleBack = () => {
+		setSelectedChat(null);
+	};
+
+	// Function to handle form submission
+	const handleSendMessage = (e) => {
+		e.preventDefault();
+		sendMessage();
+	};
+
+	// Filter chats based on search query
+	const filteredChats = chats.filter((chat) =>
+		chat.name?.toLowerCase().includes(searchQuery.toLowerCase()),
+	);
+
 	return (
 		<>
 			<header>
@@ -202,83 +220,118 @@ export function AdminPage() {
 					<button onClick={Logout}>Logout</button>
 				</div>
 			</header>
-			<main>
-				<section className='admin-chat-info'>
-					<input type='text' placeholder='Search for users' />
+			<main className={selectedChat ? 'chat-active' : ''}>
+				{/* User List Section */}
+				<section className={`admin-chat-info ${selectedChat ? 'hidden' : ''}`}>
+					<input
+						type='text'
+						placeholder='Search for users'
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+					/>
 					<div className='admin-chat-info-users-list'>
-						{chats.map((chat) => (
+						{loading ?
 							<div
-								className='admin-chat-info-user'
-								key={chat.id}
-								onClick={() => setSelectedChat(chat)}
 								style={{
-									border:
-										selectedChat?.id === chat.id ? '1px solid #333' : 'none',
+									display: 'flex',
+									justifyContent: 'center',
+									padding: '2rem',
 								}}>
-								<div className='admin-chat-info-user-info'>
-									<img
-										src={chat ? chat.profileUrl : 'images/robot.png'}
-										alt='User'
-										className='user-img'
-									/>
-									<div className='admin-chat-info-user-div'>
-										<p className='truncate-text'>{chat.name}</p>
-										<p
-											className='truncate-text'
-											style={{
-												color:
-													chat.lastSenderId !== 'admin' ? '#00bfa5' : '#666',
-												fontWeight:
-													chat.lastSenderId !== 'admin' ? 'italic' : 'normal',
-											}}>
-											{chat.lastSenderId !== 'admin' ?
-												`User: ${chat.lastMessage}`
-											:	`You: ${chat.lastMessage}`}
+								<p>Loading chats...</p>
+							</div>
+						:	filteredChats.map((chat) => (
+								<div
+									className='admin-chat-info-user'
+									key={chat.id}
+									onClick={() => setSelectedChat(chat)}
+									style={{
+										border:
+											selectedChat?.id === chat.id ? '1px solid #333' : 'none',
+										backgroundColor:
+											selectedChat?.id === chat.id ? '#f0f0f0' : 'transparent',
+									}}>
+									<div className='admin-chat-info-user-info'>
+										<img
+											src={chat ? chat.profileUrl : 'images/robot.png'}
+											alt='User'
+											className='user-img'
+										/>
+										<div className='admin-chat-info-user-div'>
+											<p className='truncate-text'>{chat.name}</p>
+											<p
+												className='truncate-text'
+												style={{
+													color:
+														chat.lastSenderId !== 'admin' ? '#00bfa5' : '#666',
+													fontWeight:
+														chat.lastSenderId !== 'admin' ? 'italic' : 'normal',
+												}}>
+												{chat.lastSenderId !== 'admin' ?
+													`User: ${chat.lastMessage}`
+												:	`You: ${chat.lastMessage}`}
+											</p>
+										</div>
+									</div>
+									<div>
+										<p className='chat-time'>
+											{formatRelativeTime(chat.lastTimestamp)}
 										</p>
 									</div>
 								</div>
-								<div>
-									<p className='chat-time'>
-										{formatRelativeTime(chat.lastTimestamp)}
-									</p>
-								</div>
-							</div>
-						))}
+							))
+						}
 					</div>
 				</section>
-				<section className='admin-chat-input'>
-					<div className='chat-messages'>
-						{selectedChat ?
-							messages.map((msg) => (
-								<div
-									key={msg.id}
-									className={`message ${msg.adminMessage ? 'admin' : 'user'}`}>
-									<p>{msg.text}</p>
-									<span className='timestamp'>
-										{formatRelativeTime(msg.createdAt)}
-									</span>
-								</div>
-							))
-						:	<p className='select-conversation'>Select a conversation</p>}
 
-						<div ref={messagesEndRef} />
-					</div>
-					<div className='input-div'>
-						<input
-							type='text'
-							placeholder='Type your message'
-							value={newMessage}
-							onChange={(e) => setNewMessage(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									sendMessage();
-								}
-							}}
-						/>
-						<div className='img' onClick={sendMessage}>
-							<img src='images/send.png' alt='send' />
+				{/* Chat Section */}
+				<section
+					className={`admin-chat-input ${!selectedChat ? 'hidden' : ''}`}>
+					{selectedChat ?
+						<>
+							<div className='chat-header'>
+								<button className='back-button' onClick={handleBack}>
+									&#8592; {/* Left Arrow */}
+								</button>
+								<img
+									src={selectedChat.profileUrl || 'images/robot.png'}
+									alt='User'
+									className='header-user-img'
+								/>
+								<h3 className='truncate-text'>{selectedChat.name}</h3>
+							</div>
+
+							<div className='chat-messages'>
+								{messages.map((msg) => (
+									<div
+										key={msg.id}
+										className={`message ${msg.adminMessage ? 'admin' : 'user'}`}>
+										<p>{msg.text}</p>
+										<span className='timestamp'>
+											{formatRelativeTime(msg.createdAt)}
+										</span>
+									</div>
+								))}
+								<div ref={messagesEndRef} />
+							</div>
+
+							<form className='input-div' onSubmit={handleSendMessage}>
+								<input
+									type='text'
+									placeholder='Type your message'
+									value={newMessage}
+									onChange={(e) => setNewMessage(e.target.value)}
+								/>
+								<button type='submit' className='img-btn'>
+									<div className='img'>
+										<img src='images/send.png' alt='send' />
+									</div>
+								</button>
+							</form>
+						</>
+					:	<div className='select-conversation'>
+							<p>Select a conversation</p>
 						</div>
-					</div>
+					}
 				</section>
 			</main>
 		</>

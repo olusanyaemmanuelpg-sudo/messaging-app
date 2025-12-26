@@ -143,3 +143,46 @@ header {
 	text-align: right;
 	opacity: 0.7;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.user-chats {
+		display: flex;
+		flex-direction: column;
+		padding: 0;
+		height: calc(100vh - 4rem);
+	}
+
+	.about-admin {
+		display: none; /* Hide sidebar on mobile */
+	}
+
+	.user-chat {
+		width: 100%;
+		height: 100%;
+		border-radius: 0;
+		padding: 0;
+	}
+
+	.chat-messages {
+		height: calc(100vh - 130px); /* Adjust for header + input */
+	}
+
+	/* Mobile Header Optimizations */
+	header {
+		padding: 0.8rem;
+	}
+	.header-logo h2 {
+		font-size: 1.2rem;
+	}
+	.header-userInfo {
+		gap: 0.5rem;
+	}
+	.header-userInfo p {
+		display: none; /* Hide email on mobile to save space */
+	}
+	.header-userInfo button {
+		padding: 0.3rem 0.6rem;
+		font-size: 0.9rem;
+	}
+}

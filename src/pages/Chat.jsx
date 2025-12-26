@@ -35,7 +35,6 @@ export function ChatPage() {
 	const Logout = () => {
 		try {
 			signOut(auth);
-			alert('logout');
 		} catch (error) {
 			console.log(error);
 		}
@@ -155,6 +154,11 @@ export function ChatPage() {
 		}
 	};
 
+	const handleSendMessage = (e) => {
+		e.preventDefault();
+		sendMessage();
+	};
+
 	const handleImageUpload = async (event) => {
 		const file = event.target.files[0];
 		if (!file) return;
@@ -264,22 +268,19 @@ export function ChatPage() {
 						:	<p className='select-conversation'>Select a conversation</p>}
 						<div ref={messagesEndRef} />
 					</div>
-					<div className='input-div'>
+					<form className='input-div' onSubmit={handleSendMessage}>
 						<input
 							type='text'
 							placeholder='Type your message'
 							value={newMessage}
 							onChange={(e) => setNewMessage(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									sendMessage();
-								}
-							}}
 						/>
-						<div className='img' onClick={sendMessage}>
-							<img src='images/send.png' alt='send' />
-						</div>
-					</div>
+						<button type='submit' className='img-btn'>
+							<div className='img'>
+								<img src='images/send.png' alt='send' />
+							</div>
+						</button>
+					</form>
 				</section>
 			</main>
 		</>

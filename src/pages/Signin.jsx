@@ -92,6 +92,11 @@ export function SigninPage({
 	const setPassword = () => {
 		setShowPass(!showPass);
 	};
+	const handleSignin = (e) => {
+		e.preventDefault();
+		Signin();
+	};
+
 	return (
 		<div className='login'>
 			<div className='login-img'>
@@ -118,7 +123,7 @@ export function SigninPage({
 						<hr />
 					</div>
 				</div>
-				<div className='form'>
+				<form className='form' onSubmit={handleSignin}>
 					<ProfileUpload
 						setUserProfileUrl={setUserProfileUrl}
 						setLoading={setLoading}
@@ -153,11 +158,14 @@ export function SigninPage({
 						</div>
 					</div>
 					{error && <p className='error'>{error}</p>}
-				</div>
 
-				<div className='login-btn login-btn-sign' onClick={Signin}>
-					Signin
-				</div>
+					<button
+						type='submit'
+						className='login-btn login-btn-sign'
+						style={{ border: 'none', width: '100%' }}>
+						Signin
+					</button>
+				</form>
 				<p className='login-signup'>
 					<span> Have an account? </span>
 					<a href='/login'>Login</a>
