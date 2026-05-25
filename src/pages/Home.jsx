@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
 export function HomePage() {
-	const [countdown, setCountdown] = useState(12);
+	const [countdown, setCountdown] = useState(2);
 
 	useEffect(() => {
 		const timer = setInterval(() => {
