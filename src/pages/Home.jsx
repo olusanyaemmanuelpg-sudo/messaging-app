@@ -20,7 +20,7 @@ export function HomePage() {
 
 	setTimeout(() => {
 		navigate('/login');
-	}, 12000);
+	}, 2000);
 
 	return (
 		<>
